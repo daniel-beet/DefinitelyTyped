@@ -1,21 +1,26 @@
-// Type definitions for Alexa SDK for Node.js v1.0.3
+// Type definitions for Alexa SDK for Node.js v1.0.6
 // Project: https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs
 // Definitions by: Pete Beegle <https://github.com/petebeegle>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+
+import { I18n, TranslationOptions } from 'i18next';
 
 export function handler(event: RequestBody, context: Context, callback?: Function): AlexaObject;
 export function CreateStateHandler(state: string, obj: any): any;
 export var StateString: string;
 
 interface AlexaObject {
-    _event: any;
-    _context: any;
-    _callback: any;
+    readonly _event: any;
+    readonly _context: any;
+    readonly _callback: any;
     state: any;
     appId: any;
     response: any;
     dynamoDBTableName: any;
     saveBeforeResponse: boolean;
+    i18n: I18n;
+    locale: string;
+    resources: TranslationBundles;
     registerHandlers: (...handlers: Handlers[]) => any;
     execute: () => void;
 }
@@ -30,6 +35,10 @@ interface Handler {
     emitWithState: any;
     state: any;
     handler: any;
+    i18n: I18n;
+    locale: string;
+    t(key: string, options?: TranslationOptions): string | any | any[];
+    t(key: string, ...args: any[]): string | any | any[];
     event: RequestBody;
     attributes: any;
     context: any;
@@ -52,6 +61,7 @@ interface RequestBody {
     version: string;
     session: Session;
     request: LaunchRequest | IntentRequest | SessionEndedRequest;
+    context: any;
 }
 
 interface Session {
@@ -71,9 +81,12 @@ interface SessionUser {
     accessToken: string;
 }
 
-interface LaunchRequest extends IRequest { }
+interface LaunchRequest extends IRequest {
+    type: "LaunchRequest";
+}
 
 interface IntentRequest extends IRequest {
+    type: "IntentRequest";
     intent: Intent;
 }
 
@@ -83,6 +96,7 @@ interface Intent {
 }
 
 interface SessionEndedRequest extends IRequest {
+    type: "SessionEndedRequest";
     reason: string;
 }
 
@@ -90,6 +104,7 @@ interface IRequest {
     type: "LaunchRequest" | "IntentRequest" | "SessionEndedRequest";
     requestId: string;
     timeStamp: string;
+    locale: string;
 }
 
 interface ResponseBody {
@@ -128,4 +143,16 @@ interface Reprompt {
     outputSpeech: OutputSpeech;
 }
 
+type Translation = string | string[] | any | any[];
 
+interface TranslationBundle {
+  translation: Translations;
+}
+
+interface Translations {
+  [key: string]: Translation;
+}
+
+interface TranslationBundles {
+  [language: string]: TranslationBundle;
+}
