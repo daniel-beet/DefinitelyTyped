@@ -45,7 +45,7 @@ const languageStrings: Alexa.TranslationBundles = {
     },
 };
 
-exports.handler = function (event: Alexa.RequestBody, context: Alexa.Context, callback: Function) {
+exports.handler = function (event: Alexa.RequestBody, context: Alexa.Context, callback: () => void) {
     let alexa = Alexa.handler(event, context, callback);
     alexa.appId = "123abc";
     alexa.resources = languageStrings;

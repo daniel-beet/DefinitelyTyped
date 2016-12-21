@@ -1,11 +1,13 @@
-// Type definitions for Alexa SDK for Node.js v1.0.6
+// Type definitions for Alexa SDK for Node.js 1.0
 // Project: https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs
 // Definitions by: Pete Beegle <https://github.com/petebeegle>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
+// Note: for patch release 1.0.6
+
 import { I18n, TranslationOptions } from 'i18next';
 
-export function handler(event: RequestBody, context: Context, callback?: Function): AlexaObject;
+export function handler(event: RequestBody, context: Context, callback?: () => void): AlexaObject;
 export function CreateStateHandler(state: string, obj: any): any;
 export var StateString: string;
 
@@ -81,11 +83,11 @@ interface SessionUser {
     accessToken: string;
 }
 
-interface LaunchRequest extends IRequest {
+interface LaunchRequest extends Request {
     type: "LaunchRequest";
-}
+ }
 
-interface IntentRequest extends IRequest {
+interface IntentRequest extends Request {
     type: "IntentRequest";
     intent: Intent;
 }
@@ -95,12 +97,12 @@ interface Intent {
     slots: any;
 }
 
-interface SessionEndedRequest extends IRequest {
+interface SessionEndedRequest extends Request {
     type: "SessionEndedRequest";
     reason: string;
 }
 
-interface IRequest {
+interface Request {
     type: "LaunchRequest" | "IntentRequest" | "SessionEndedRequest";
     requestId: string;
     timeStamp: string;
